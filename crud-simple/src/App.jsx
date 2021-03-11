@@ -4,6 +4,7 @@ import shortid from "shortid";
 function App() {
   const [tarea, setTarea] = React.useState('')
   const [tareas, setTareas] = React.useState([])
+  const [modoEdicion, setModoEdicion] = React.useState(false)
 
 
   const agregarTarea = e => {
@@ -26,6 +27,12 @@ function App() {
     setTareas(arrayFiltered)
   }
 
+  const editar = item => {
+    console.log(item)
+    setModoEdicion(true)
+    setTarea(item.nombreTarea)
+  }
+
   return (
     <div className="container">
       <h1 className='text-center'>CRUD SIMPLE</h1>
@@ -39,16 +46,18 @@ function App() {
                 <li className="list-group-item" key={item.id}>
                   <span className="lead">{item.nombreTarea}</span>
                   <button
-                    className="btn btn-danger btn-sm float-right mx-2"
+                    className="btn btn-danger btn-sm float-end mx-2"
                     onClick={() => eliminarTarea(item.id)}
                   >
                     Eliminar
                   </button>
-
                   <button
-                    className="btn btn-warning btn-sm float-right">
+                    className="btn btn-warning btn-sm float-end"
+                    onClick={() => editar(item)}
+                  >
                     Editar
                   </button>
+
                 </li>
               ))
             }
@@ -57,7 +66,12 @@ function App() {
           </ul>
         </div>
         <div className="col-4">
-          <h4 className="text-center">Formulario</h4>
+          <h4 className="text-center">
+            {
+              modoEdicion ? 'Editar Tarea' : 'Agregar Tarea'
+            }
+
+          </h4>
           <form onSubmit={agregarTarea}>
             <input
               type="text"
@@ -66,7 +80,12 @@ function App() {
               onChange={e => setTarea(e.target.value)}
               value={tarea}
             />
-            <button className="btn btn-dark btn-block" type="submit">Agregar</button>
+
+            {
+              modoEdicion ? (
+                <button className="btn btn-dark btn-block" type="submit">Editar</button>
+              ) : (<button className="btn btn-dark btn-block" type="submit">Agregar</button>)
+            }
           </form>
         </div>
       </div>
